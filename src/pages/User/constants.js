@@ -1,0 +1,17 @@
+export const initialValuesUser = {
+  id: "",
+  descricao: "",
+  login: "",
+  senha: "",
+  tipoContatoId: "",
+  email: "",
+  senhaEmail: "",
+  representante: "",
+  agenciaId: "",
+  imagem: "",
+  dataCadastro: "",
+  dataSenha: "",
+  origem: "",
+  situacao: 1,
+  tipoContato: "",
+};

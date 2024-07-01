@@ -1,0 +1,67 @@
+image: node:16
+
+# Workflow Configuration
+
+pipelines:
+  branches:
+    master:
+      - parallel:
+          - step:
+              name: Build and Test
+              caches:
+                - node
+              script:
+                - yarn install
+                - yarn run build
+              artifacts:
+                - dist/**
+          - step:
+              name: Security Scan
+              script:
+                - pipe: atlassian/git-secrets-scan:0.5.1
+      - step:
+          oidc: true
+          name: Deploy to Production
+          deployment: Production
+          trigger: manual
+          clone:
+            enabled: false
+          script:
+            # sync your files to S3
+            - pipe: atlassian/aws-s3-deploy:1.1.0
+              variables:
+                AWS_DEFAULT_REGION: "us-east-1"
+                AWS_OIDC_ROLE_ARN: "arn:aws:iam::244983680872:role/TiagoS3BitbucketHITK"
+                S3_BUCKET: "consumer-nissin.optimumcloud.com.br"
+                LOCAL_PATH: "dist"
+
+    dev:
+      - parallel:
+          - step:
+              name: Build and Test
+              caches:
+                - node
+              script:
+                - yarn install
+                - yarn run build
+              artifacts:
+                - dist/**
+          - step:
+              name: Security Scan
+              script:
+                - pipe: atlassian/git-secrets-scan:0.5.1
+      - step:
+          oidc: true
+          name: Deploy to Test
+          deployment: Test
+          trigger: manual
+          clone:
+            enabled: false
+          script:
+            # sync your files to S3
+            - pipe: atlassian/aws-s3-deploy:1.1.0
+              variables:
+                AWS_DEFAULT_REGION: "us-east-1"
+                AWS_OIDC_ROLE_ARN: "arn:aws:iam::244983680872:role/TiagoS3BitbucketHITK"
+                S3_BUCKET: "consumervoice-dev.optimumcloud.com.br"
+                LOCAL_PATH: "dist"

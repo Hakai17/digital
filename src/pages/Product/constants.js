@@ -1,0 +1,18 @@
+export const initialValuesProduct = {
+  descricao: "",
+  descricaoWeb: "",
+  visualizadoWeb: "",
+  grupoProdutoId: "",
+  codigoId1: "",
+  codigoId2: "",
+  codigoId3: "",
+  codigoId4: "",
+  codigoId5: "",
+  descontinuado: false,
+  obsDescontinuacao: "",
+  imagem: "",
+  obs: "",
+  origem: "",
+  dataDescontinuado: "",
+  inserir: true,
+};
